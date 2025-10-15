@@ -12,3 +12,6 @@ struct Token {
 };
 
 std::vector<Token> tokenize(const std::string &s, std::string *err=nullptr);
+
+// Set the last evaluated result so tokenizer can use it for 'ans'
+void set_last_result(double value);

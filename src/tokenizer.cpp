@@ -2,6 +2,13 @@
 #include <cctype>
 #include <cstdlib>
 
+// Global variable to store last result
+double last_result = 0.0;
+
+void set_last_result(double value) {
+    last_result = value;
+}
+
 std::vector<Token> tokenize(const std::string &s, std::string *err){
     std::vector<Token> out;
     size_t i=0;
@@ -28,13 +35,14 @@ std::vector<Token> tokenize(const std::string &s, std::string *err){
         }
         if(c=='('){ out.push_back(Token{TokenType::LParen, 0.0, 0}); i++; continue; }
         if(c==')'){ out.push_back(Token{TokenType::RParen, 0.0, 0}); i++; continue; }
-        // constants: pi and e
+        // constants: pi, e, and ans
         if(std::isalpha((unsigned char)c)){
             size_t j=i;
             while(j<s.size() && std::isalpha((unsigned char)s[j])) j++;
             std::string name = s.substr(i, j-i);
             if(name=="pi") out.push_back(Token{TokenType::Number, 3.141592653589793, 0});
             else if(name=="e") out.push_back(Token{TokenType::Number, 2.718281828459045, 0});
+            else if(name=="ans") out.push_back(Token{TokenType::Number, last_result, 0});
             else { if(err) *err = "Unknown identifier: "+name; return {}; }
             i = j; continue;
         }
